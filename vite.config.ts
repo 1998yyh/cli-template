@@ -3,12 +3,9 @@ import vue from '@vitejs/plugin-vue'
 import autoprefixer from 'autoprefixer'
 import postcssPxtorem from 'postcss-pxtorem'
 import svgr from 'vite-svg-loader'
-// import tailwindcss from 'tailwindcss'
-// ! 这个家伙暴露出来的不是函数 是个对象
 import viteStylelint from '@amatlash/vite-plugin-stylelint'
 // 自动引入
 import DefineOptions from 'unplugin-vue-define-options/vite'
-import viteEslint from 'vite-plugin-eslint'
 import cssnano from 'cssnano'
 import AutoImport from 'unplugin-auto-import/vite'
 import path from 'path'
@@ -26,21 +23,33 @@ const variablePath = normalizePath(path.resolve('./src/variable.scss'))
 export default defineConfig({
     base: isProduction ? CDN_URL : '/',
     plugins: [
-        vue({
-            reactivityTransform: true
-        }),
+        vue(),
         AutoImport({
             imports: ['vue', 'vue-router'],
             dts: 'src/auto-import.d.ts'
         }),
         DefineOptions(),
-        svgr(),
-        viteEslint(),
-        _viteStylelint({
-            // 对某些文件排除检查
-            exclude: /windicss|node_modules/
-        })
+        svgr()
     ],
+    server: {
+        // host: true,
+        // port: 5174,
+        // proxy: {
+        //   '^/h5': {
+        //     target: 'http://10.80.77.20:7300',
+        //     changeOrigin: true,
+        //     // rewrite: (path) => path.replace(/^\/mock/, '/mock/6279e697bdf96e667e125213/h5_copy')
+        //     rewrite: (path) => path.replace(/^\/h5/, '/mock/60acc5bede58b20c48f663bc')
+        //   }
+        // },
+        // fs: {
+        //   // Allow serving files from one level up to the project root
+        //   strict: false
+        // }
+    },
+    define: {
+
+    },
     resolve: {
         alias: {
             '@assets': path.join(__dirname, 'src/assets'),
@@ -74,7 +83,6 @@ export default defineConfig({
                 cssnano({
                     preset: 'default'
                 })
-                // tailwindcss(),
             ]
         }
     },
